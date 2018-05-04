@@ -63,7 +63,61 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
+% Problem 1 solution
+a1 = [ones(m, 1) X];
+a2 = [ones(m, 1) sigmoid(a1 * Theta1')];
+h = sigmoid(a2 * Theta2');
 
+% Constructing a vector of result ex: for 5 of 10 the 1 should be at 
+% fifth position [0 0 0 0 1 0 0 0 0 0] where rows are training set samples
+yVec = repmat([1:num_labels], m, 1) == repmat(y, 1, num_labels);
+
+cost = -yVec .* log(h) - (1 - yVec) .* log(1 - h);
+
+J = (1 / m) * sum(sum(cost));
+
+% Problem 2 solution
+theta1ExcludingBias = Theta1(:, 2:end);
+theta2ExcludingBias = Theta2(:, 2:end);
+
+reg1 = sum(sum(theta1ExcludingBias .^ 2));
+reg2 = sum(sum(theta2ExcludingBias .^ 2));
+
+J = (1 / m) * sum(sum(cost)) + (lambda / (2 * m)) * (reg1 + reg2);
+
+delta1 = zeros(size(Theta1));
+delta2 = zeros(size(Theta2));
+
+for t = 1:m,
+
+	h1t = h(t, :)';
+	a1t = a1(t,:)';
+	a2t = a2(t, :)';
+	yVect = yVec(t, :)';
+
+	d3t = h1t - yVect;
+	z2t = [1; Theta1 * a1t];
+    d2t = Theta2' * d3t .* sigmoidGradient(z2t);
+
+    delta1 = delta1 + d2t(2:end) * a1t';
+    delta2 = delta2 + d3t * a2t';
+end;
+
+Theta1_grad = (1 / m) * delta1;
+Theta2_grad = (1 / m) * delta2;
+
+% solution for gradient regularization
+Theta1ZeroedBias = [ zeros(size(Theta1, 1), 1) theta1ExcludingBias ];
+Theta2ZeroedBias = [ zeros(size(Theta2, 1), 1) theta2ExcludingBias ];
+Theta1_grad = (1 / m) * delta1 + (lambda / m) * Theta1ZeroedBias;
+Theta2_grad = (1 / m) * delta2 + (lambda / m) * Theta2ZeroedBias;
+
+% -------------------------------------------------------------
+
+% =========================================================================
+
+% Unroll gradients
+grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
 
 
