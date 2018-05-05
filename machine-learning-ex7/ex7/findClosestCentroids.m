@@ -20,6 +20,24 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
+for m=1:length(X)
+    % 1 to length of X
+	distances = zeros(size(centroids, 1), 1);
+    
+    % 1 to K(number of segments)
+	for k=1:K
+        % location
+        location = X(m, :);
+        centroid = centroids(k, :);
+        
+        % get distnace x from centroid of K 
+		distances(k) = sum((location - centroid) .^ 2 );
+	end
+	[~, index] = min(distances);
+    
+    % set segment
+	idx(m) = index;
+end
 
 
 

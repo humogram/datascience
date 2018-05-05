@@ -26,11 +26,16 @@ centroids = zeros(K, n);
 % Note: You can use a for-loop over the centroids to compute this.
 %
 
-
-
-
-
-
+% K(number of segments)
+for k=1:K
+    
+    % count of elements in k segment
+    countK = length(find(idx == k));
+    
+    % sum of elements in k segment
+    sumK = sum(X(idx == k, :));
+	centroids(k, :) = (1 / countK) * sumK;
+end
 
 
 % =============================================================
