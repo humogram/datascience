@@ -25,12 +25,29 @@ for epsilon = min(pval):stepsize:max(pval)
 
 
 
+    cvPredictions = (pval < epsilon);
 
+    tp = sum((cvPredictions == 1) & (yval == 1));
+    fp = sum((cvPredictions == 1) & (yval == 0));
+    fn = sum((cvPredictions == 0) & (yval == 1));
 
+    if tp + fp > 0
+      prec = tp / (tp + fp);
+    else
+      prec = 0;
+    end
 
+    if (tp + fn) > 0
+      rec = tp / (tp + fn);
+    else
+      rec = 0;
+    end
 
-
-
+    if prec + rec > 0
+      F1 = 2 * prec * rec / (prec + rec);
+    else
+      F1 = 0;
+    end
 
 
 
