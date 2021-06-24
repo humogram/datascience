@@ -99,8 +99,8 @@ CREATE TABLE sub_data.adspot_recommendation AS(
     XY.cnt / CAST(X.cnt AS DOUBLE) AS confident_x_to_y,
     XY.cnt / CAST(Y.cnt AS DOUBLE) AS confident_y_to_x,  
     X.cnt AS support_x, -- denominator을생략(total record)가 같으므로
-    Y.cnt AS support_y,  -- denominator을생략(total record)가 같으므로
-    XY.cnt AS support_xy  -- denominator을생략(total record)가 같으므로
+    Y.cnt AS support_y, 
+    XY.cnt AS support_xy 
   FROM XY
     INNER JOIN X ON XY.pid=X.pid
     INNER JOIN Y ON XY.did=Y.did
