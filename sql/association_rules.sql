@@ -9,9 +9,9 @@ CREATE TABLE sub_data.adspot_recommendation AS(
       uid
     FROM sub_data.did_uid_daily_summary --최신28일분이 들어가있음
     GROUP BY uid
-    HAVING count(1)>10000  -- 최소 1개월간 1만impが발생한곳만 처리(sql perforamcne)
+    HAVING count(1)>10000  -- 1만이상 IMP가 나온 유저는 포함시키지 않기위해
   ),
-  -- adspot과유저의 linked table生成 
+  -- adspot과유저의 linked table생성 
   DID_UID AS(
     SELECT 
       did_uid_daily_summary.did, --adspot ID
@@ -87,7 +87,7 @@ CREATE TABLE sub_data.adspot_recommendation AS(
     GROUP BY
       PID_UID.pid,
       DID_UID.did
-    HAVING count(1)>2 -- Xの최저3인이상이 Y에 발생 
+    HAVING count(1)>2 -- X의 최저3인이상이 Y에 발생 
   )
   SELECT 
     XY.pid as from_pid, 
